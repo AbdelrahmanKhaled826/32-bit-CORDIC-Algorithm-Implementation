@@ -11,10 +11,8 @@ This project implements a **13-stage pipelined CORDIC (Coordinate Rotation Digit
 4. [System Architecture](#system-architecture)
 6. [Implementation Details](#implementation-details)
 7. [Verification Setup](#verification_Setup)
-8. [Repository Structure](#repository-structure)
 10. [Tools Used](#tools-used)
-11. [Future Improvements](#future-improvements)
-12. [License](#license)
+11. [Author](#Author)
 
 ---
 
@@ -69,6 +67,7 @@ This project demonstrates:
 ## ⚙️ System Architecture
 
 The CORDIC algorithm iteratively rotates a vector in 2D space using the following equations:
+`rgb(9, 105, 218)
 > ### CORDIC Core Equations
 > The iterative updates are defined as:
 >
@@ -86,7 +85,7 @@ The CORDIC algorithm iteratively rotates a vector in 2D space using the followin
 > - $d_i = \text{sign}(z_i)$  
 > - $(x_0, y_0)$ is the initial vector  
 > - $z_0$ is the input angle
-
+`
 The scaling factor $K_n$ after $n$ iterations is given by:
 
 $$
@@ -161,6 +160,11 @@ module cordic #(
   - **Fraction Length (FL) = 22 bits**
 
 ###  ✅Simulation Results
+<p align="center">
+
+<img width="918" height="239" alt="image" src="https://github.com/user-attachments/assets/9ef35442-4060-4433-866e-c9092ea57621" />
+</p>
+
 All test cases demonstrated **excellent agreement** between MATLAB and RTL outputs.  
 The **maximum relative error** across all tests remained **below 0.001%**, confirming the numerical precision of the design.
 
@@ -168,14 +172,74 @@ Example results:
 
 - **Magnitude and angle computation:** Error ≤ 0.0001%
 <p align="center">
+<img width="508" height="218" alt="image" src="https://github.com/user-attachments/assets/5739ce17-5626-4d96-9e1a-f9268557c495" />
+<img width="303" height="223" alt="image" src="https://github.com/user-attachments/assets/2ca11f14-45e2-4fa0-a22b-5190553ff153" />
 
-
+<img width="498" height="213" alt="image" src="https://github.com/user-attachments/assets/6c1a79c2-b2f7-4f72-8e49-9b87865ee331" />
+<img width="302" height="222" alt="image" src="https://github.com/user-attachments/assets/eca412ad-1963-4303-86de-7445948dadd2" />
 </p>
+
 - **Sine and cosine generation:** Error ≤ 0.0001%
 <p align="center">
+<img width="538" height="239" alt="image" src="https://github.com/user-attachments/assets/429c3b26-1bdb-4f77-ad0c-a076952393dc" />
+<img width="319" height="238" alt="image" src="https://github.com/user-attachments/assets/4518a2c9-b475-4bcf-9297-40c1505e3b22" />
+
+<img width="543" height="236" alt="image" src="https://github.com/user-attachments/assets/5cd0fd55-a2d7-4197-a480-6ae4841bc99f" />
+<img width="321" height="239" alt="image" src="https://github.com/user-attachments/assets/2a18b986-6db0-4183-a74d-a1bd475f2d55" />
+
 
 </p>
+
 - **Vector rotations (X, Y):** Error ≤ 0.0003% 
 <p align="center">
+<img width="633" height="272" alt="image" src="https://github.com/user-attachments/assets/d9fb578f-ff80-4edf-82f8-4740a8fe5b57" />
+<img width="226" height="304" alt="image" src="https://github.com/user-attachments/assets/35527cf1-a027-46f7-850a-29aff94a7be8" />
 
 </p>
+
+---
+
+### 📜Elaborated Design
+<p align="center">
+  <img width="908" height="404" alt="image" src="https://github.com/user-attachments/assets/e369b76b-9ec5-45a1-a09f-e5ff026c9f65" />
+
+</p>
+
+---
+
+## 📈 Performance Metrics
+<p align="center">
+  
+| Metric | Value | Tool |
+|--------|--------|------|
+| Maximum Frequency | 250 MHz | Vivado |
+| Total Power | 0.6 W | Vivado Power Report |
+| Timing Slack | +0.564 ns | Post-Route Timing Summary |
+| LUT Utilization | 1.83% | Synthesis Report |
+
+</p>
+### 📜 Timing summary on 250 MHZ
+<p align="center">
+  <img width="1030" height="212" alt="image" src="https://github.com/user-attachments/assets/056db41a-47bf-4520-9c65-054b12bb5d7e" />
+
+</p>
+
+---
+
+## 🛠️ Tools Used
+
+| Tool                  | Purpose                                    |
+| ---------------------- | ------------------------------------------ |
+| **MATLAB R2023b**      | Fixed-point modeling and data verification |
+| **Vivado**  | RTL simulation, synthesis, and waveform analysis |
+| **Git & GitHub**       | Version control and project sharing        |
+
+---
+## 👤 Author
+
+**Abdelragman Khaled Elsayed**  
+*Digital Design Engineer · FPGA Enthusiast*  
+
+📧 [abdokhaled1712002@gmail.com](abdokhaled1712002@gmail.com)  
+
+
