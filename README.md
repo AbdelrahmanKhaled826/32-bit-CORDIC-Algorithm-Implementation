@@ -25,7 +25,7 @@ This project demonstrates:
 - Fixed-point arithmetic modeling in MATLAB  
 - RTL design in Verilog HDL  
 - Co-simulation and accuracy comparison  
-- Pipelined architecture for high throughput  
+- Pipelined architecture for high throughput
 <p align="center">
   <img width="894" height="318" alt="image" src="https://github.com/user-attachments/assets/9b709ade-25c4-472e-87ab-73f419372439" />
 </p>
@@ -65,9 +65,7 @@ This project demonstrates:
 ---
 
 ## ⚙️ System Architecture
-
 The CORDIC algorithm iteratively rotates a vector in 2D space using the following equations:
-`rgb(9, 105, 218)
 > ### CORDIC Core Equations
 > The iterative updates are defined as:
 >
@@ -85,7 +83,7 @@ The CORDIC algorithm iteratively rotates a vector in 2D space using the followin
 > - $d_i = \text{sign}(z_i)$  
 > - $(x_0, y_0)$ is the initial vector  
 > - $z_0$ is the input angle
-`
+
 The scaling factor $K_n$ after $n$ iterations is given by:
 
 $$
