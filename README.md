@@ -216,7 +216,9 @@ Example results:
 | LUT Utilization | 1.83% | Synthesis Report |
 
 </p>
+
 ### 📜 Timing summary on 250 MHZ
+
 <p align="center">
   <img width="1030" height="212" alt="image" src="https://github.com/user-attachments/assets/056db41a-47bf-4520-9c65-054b12bb5d7e" />
 
@@ -233,6 +235,7 @@ Example results:
 | **Git & GitHub**       | Version control and project sharing        |
 
 ---
+
 ## 👤 Author
 
 **Abdelragman Khaled Elsayed**  
