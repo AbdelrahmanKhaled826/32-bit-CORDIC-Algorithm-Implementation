@@ -32,14 +32,22 @@ This project implements a **13-stage pipelined CORDIC (Coordinate Rotation Digit
 ├── RTL/
 │   ├── cordic.v
 │   ├── cordic_stage.v
-|   ├── cordic_fixed_multiplier.v
-|   ├── cordic_fixed_multiplier_tb.v
+│   ├── cordic_fixed_multiplier.v
+│   ├── cordic_fixed_multiplier_tb.v
 │   ├── cordic_tb.v
+│
+├── results/
+│   ├── constrains_cordic.xdc
+│   ├── cordic_clock_utilization_routed.rpt
+│   ├── cordic_power_routed.rpt
+│   ├── cordic_route_status.rpt
+│   ├── cordic_timing_summary_routed.rpt
 │
 ├── documentation/
 │   ├── cordic.pdf
 │
 └── README.md
+
 
 ---
 
