@@ -5,49 +5,16 @@ This project implements a **13-stage pipelined CORDIC (Coordinate Rotation Digit
 ---
 
 ## 📘 Table of Contents
-1.[Repository Structure](#Repository-Structure)
 1. [Overview](#overview)
-2. [Design Objectives](#design-objectives)
-3. [System Architecture](#system-architecture)
-4. [Implementation Details](#implementation-details)
-5. [Simulation & Verification](#simulation--verification)
-6. [Results Summary](#results-summary)
-7. [Repository Structure](#repository-structure)
-8. [Tools Used](#tools-used)
-9. [Future Improvements](#future-improvements)
-10. [License](#license)
-
----
-
-## 🗂️ Repository Structure
-
-32_bit_CORDIC_Algorithm_Implementation/
-│
-├── Matlab/
-│   ├── cordic.m
-│   ├── chooes_good_iteration.m
-│   ├── chooes_good_wordlength.m
-│   ├── prepare_data_to_rtl.m
-│
-├── RTL/
-│   ├── cordic.v
-│   ├── cordic_stage.v
-│   ├── cordic_fixed_multiplier.v
-│   ├── cordic_fixed_multiplier_tb.v
-│   ├── cordic_tb.v
-│
-├── results/
-│   ├── constrains_cordic.xdc
-│   ├── cordic_clock_utilization_routed.rpt
-│   ├── cordic_power_routed.rpt
-│   ├── cordic_route_status.rpt
-│   ├── cordic_timing_summary_routed.rpt
-│
-├── documentation/
-│   ├── cordic.pdf
-│
-└── README.md
-
+2. [Project Structure](#Project_Structure)
+3. [Design Objectives](#design-objectives)
+4. [System Architecture](#system-architecture)
+6. [Implementation Details](#implementation-details)
+7. [Verification Setup](#verification_Setup)
+8. [Repository Structure](#repository-structure)
+10. [Tools Used](#tools-used)
+11. [Future Improvements](#future-improvements)
+12. [License](#license)
 
 ---
 
@@ -64,6 +31,22 @@ This project demonstrates:
 <p align="center">
   <img width="894" height="318" alt="image" src="https://github.com/user-attachments/assets/9b709ade-25c4-472e-87ab-73f419372439" />
 </p>
+
+---
+
+## 📁 Project Structure
+
+| File | Description |
+|------|--------------|
+| `cordic.m` | Core MATLAB model for CORDIC computation |
+| `chooes_good_iteration.m` | Script to determine optimal iteration count (tolerance-based) |
+| `chooes_good_wordlength.m` | Script to choose best fixed-point word length |
+| `prepare_data_to_rtl.m` | Generates fixed-point data for RTL simulation |
+| `cordic.v` | Top-level CORDIC module |
+| `cordic_stage.v` | Individual pipeline stage implementation |
+| `cordic_fixed_multiplier.v` | Fixed-point multiplier module |
+| `cordic_tb.v` | Main testbench comparing RTL vs. MATLAB outputs |
+| `cordic_fixed_multiplier_tb.v` | Unit test for multiplier block |
 
 ---
 
@@ -86,24 +69,33 @@ This project demonstrates:
 ## ⚙️ System Architecture
 
 The CORDIC algorithm iteratively rotates a vector in 2D space using the following equations:
+> ### CORDIC Core Equations
+> The iterative updates are defined as:
+>
+> $$
+> x_{i+1} = x_i + d_i \, y_i \, 2^{-i}
+> $$
+> $$
+> y_{i+1} = y_i - d_i \, x_i \, 2^{-i}
+> $$
+> $$
+> z_{i+1} = z_i + d_i \, \tan^{-1}(2^{-i})
+> $$
+>
+> where:
+> - $d_i = \text{sign}(z_i)$  
+> - $(x_0, y_0)$ is the initial vector  
+> - $z_0$ is the input angle
+
+The scaling factor $K_n$ after $n$ iterations is given by:
 
 $$
-x_{i+1} = x_i + y_i \cdot d_i \cdot 2^{-i}
+K_n = \prod_{i=0}^{n-1} \frac{1}{\sqrt{1 + 2^{-2i}}}
 $$
 
-$$
-y_{i+1} = y_i - x_i \cdot d_i \cdot 2^{-i}
-$$
+For large $n$, $K_n \approx 0.6073$.
 
-$$
-z_{i+1} = z_i + d_i \cdot \arctan(2^{-i})
-$$
 
-where  
-
-$$
-d_i = \text{sign}(z_i)
-$$
 
 💡 *These equations allow CORDIC to compute trigonometric, vectoring, and rotation operations efficiently using only shift and add operations — no multipliers required.*
 ---
@@ -113,6 +105,27 @@ $$
 ### 🔹 MATLAB Fixed-Point Modeling
 - MATLAB scripts were used to analyze **quantization error** and determine the optimal word and fraction lengths.
 - Fixed-point testbench compared expected vs. simulated values for all modes.
+- To achieve the desired precision in CORDIC computations, a MATLAB simulation was performed with up to 30 iterations. The error at each step was compared against a tolerance level of 1e-4.
+The results showed that increasing the number of iterations reduces the residual error; however, beyond a certain point, improvements become negligible due to fixed-point resolution limits.
+
+<p align="center">
+
+<img width="487" height="443" alt="image" src="https://github.com/user-attachments/assets/12d62a26-3fa0-4600-a331-4a969d0b0dc9" />
+
+<img width="504" height="443" alt="image" src="https://github.com/user-attachments/assets/7b44645b-f143-48a1-ba73-bbb62e30de3f" />
+
+<img width="534" height="484" alt="image" src="https://github.com/user-attachments/assets/9f5ff850-8f80-4979-b708-f772cb6d8f44" />
+
+</p>
+✅ Result: Optimal iteration count = 13
+
+-Through MATLAB simulation and systematic testing, the fixed-point parameters for the CORDIC design were optimized to balance accuracy and hardware efficiency.
+After evaluating multiple Word Length (WL) and Fraction Length (FL) combinations, the configuration of WL = 32 and FL = 22 was identified as the best trade-off, ensuring the maximum quantization error remained below 1×10⁻⁷.
+<p align="center">
+
+<img width="624" height="568" alt="image" src="https://github.com/user-attachments/assets/e3a53cd4-8203-4c65-a9af-33dfd5260b62" />
+
+</p>
 
 ### 🔹 Verilog HDL Design
 - RTL implemented with **parameterized generics** for iteration and word length.
@@ -127,12 +140,42 @@ module cordic #(
   parameter FRACTION_LENGTH = 22,
   parameter MUL_LENGTH = 64
 )(
-  input                          i_cordic_clk,
-  input                          i_cordic_rst_n,
-  input           [1:0]          i_cordic_mode,
-  input signed   [WORD_LENGTH-1:0] i_cordic_x,
-  input signed   [WORD_LENGTH-1:0] i_cordic_y,
-  input signed   [WORD_LENGTH-1:0] i_cordic_theta,
-  output reg signed [MUL_LENGTH-1:0] o_codic_out1,
-  output reg signed [MUL_LENGTH-1:0] o_codic_out2
+  input                                 i_cordic_clk,
+  input                                 i_cordic_rst_n,
+  input               [1:0]             i_cordic_mode,
+  input      signed   [WORD_LENGTH-1:0] i_cordic_x,
+  input      signed   [WORD_LENGTH-1:0] i_cordic_y,
+  input      signed   [WORD_LENGTH-1:0] i_cordic_theta,
+  output reg signed   [WORD_LENGTH-1:0] o_codic_out1,
+  output reg signed   [WORD_LENGTH-1:0] o_codic_out2
 );
+```
+---
+
+## 🔹 Verification Setup
+- MATLAB was used to generate **golden reference data** for all test cases (magnitude, angle, sine, cosine, and rotation).
+- The RTL implementation was tested using a dedicated **testbench** (`cordic_tb.v`), which automatically compares RTL outputs with MATLAB reference results.
+- All tests were performed using:
+  - **13 pipeline stages** (iterations)
+  - **Word Length (WL) = 32 bits**
+  - **Fraction Length (FL) = 22 bits**
+
+###  ✅Simulation Results
+All test cases demonstrated **excellent agreement** between MATLAB and RTL outputs.  
+The **maximum relative error** across all tests remained **below 0.001%**, confirming the numerical precision of the design.
+
+Example results:
+
+- **Magnitude and angle computation:** Error ≤ 0.0001%
+<p align="center">
+
+
+</p>
+- **Sine and cosine generation:** Error ≤ 0.0001%
+<p align="center">
+
+</p>
+- **Vector rotations (X, Y):** Error ≤ 0.0003% 
+<p align="center">
+
+</p>
