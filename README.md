@@ -83,7 +83,6 @@ The CORDIC algorithm iteratively rotates a vector in 2D space using the followin
 > - $d_i = \text{sign}(z_i)$  
 > - $(x_0, y_0)$ is the initial vector  
 > - $z_0$ is the input angle
-
 The scaling factor $K_n$ after $n$ iterations is given by:
 
 $$
